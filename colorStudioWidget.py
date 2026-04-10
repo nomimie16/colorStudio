@@ -8,13 +8,7 @@ Color Studio - Rémi Cozot 2019
 # ----------------------------------------------------------------------------------
 # main changes
 # ----------------------------------------------------------------------------------
-# GUI lib: pygame to pyqt5
-# include 3d color point cloud (modernGL) 
-# ----------------------------------------------------------------------------------
-# version0.0
-# -----------------------------------------------------------------------------------
-# Qt window
-
+# GUI : PyQt5 to PyQt6
 # import(s)
 # ----------------------------------------------------------------------------------
 
@@ -26,9 +20,10 @@ import math
 import numpy as np
 import skimage
 
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QSlider
-from PyQt5.QtGui import QIcon, QPixmap, QImage
-from PyQt5 import QtCore, QtOpenGL 
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QSlider
+from PyQt6.QtGui import QPixmap, QImage, QSurfaceFormat
+from PyQt6.QtOpenGLWidgets import QOpenGLWidget
+from PyQt6 import QtCore
 
 import colorStudioModel
 import colorStudioUtils
@@ -51,14 +46,15 @@ def getScreenSize():
 # ----------------------------------------------------------------------------------
 # classes
 # ----------------------------------------------------------------------------------
-class QModernGLWidget(QtOpenGL.QGLWidget):
+class QModernGLWidget(QOpenGLWidget):
     def __init__(self):
-        fmt = QtOpenGL.QGLFormat()
+        fmt = QSurfaceFormat()
         fmt.setVersion(3, 3)
-        fmt.setProfile(QtOpenGL.QGLFormat.CoreProfile)
-        fmt.setSampleBuffers(True)
+        fmt.setProfile(QSurfaceFormat.OpenGLContextProfile.CoreProfile)
+        fmt.setSamples(4)
+        QSurfaceFormat.setDefaultFormat(fmt)
         self.timer = QtCore.QElapsedTimer()
-        super(QModernGLWidget, self).__init__(fmt, None)
+        super().__init__()
 
     def initializeGL(self):
         pass
@@ -102,7 +98,7 @@ class HelloWorld2D:
         )
 
         self.vbo = ctx.buffer(reserve='1024MB', dynamic=True)
-        self.vao = ctx.simple_vertex_array(self.prog, self.vbo, 'in_vert', 'in_color')
+        self.vao = ctx.vertex_array(self.prog, [(self.vbo, '2f 4f', 'in_vert', 'in_color')])  # Fonction remplacée depuis ModernGL 5.7
 
     def pan(self, pos):
         self.prog['Pan'].value = pos
@@ -176,12 +172,12 @@ class MyWidgetGL(QModernGLWidget):
         self.scene.plot(self.VBOdata)
 
     def mousePressEvent(self, evt):
-        pan_tool.start_drag(evt.x() / 512, evt.y() / 512)
-        self.scene.pan(pan_tool.value)
-        self.update()
+        pan_tool.start_drag(
+            evt.position().x() / 512,
+            evt.position().y() / 512)
 
     def mouseMoveEvent(self, evt):
-        pan_tool.dragging(evt.x() / 512, evt.y() / 512)
+        pan_tool.dragging(evt.position().x() / 512, evt.position().y() / 512)
         self.scene.pan(pan_tool.value)
         self.update()
 
@@ -274,7 +270,7 @@ class CSQLightControlLayout(QHBoxLayout):
         self._ieButton = CSQIMGButton(uiIEIMG,(50,50),name="increase exposure button")
         self._ccButton = CSQIMGButton(uiCCIMG,(50,50),name="light color  button")
         self._exposureValueLabel = QLabel("+0.00")
-        self._sliderPosition = QSlider(QtCore.Qt.Horizontal)
+        self._sliderPosition = QSlider(QtCore.Qt.Orientation.Horizontal)
         self._sliderPosition.setValue(lightPosIdx)
         # control of Exposure
         self._step 	= stepE
@@ -419,7 +415,7 @@ class CSDisplayWidget(QWidget):
         img = (np.ones((h,w,3))*255).astype(np.uint8)
         height, width, channel = img.shape
         bytesPerLine = channel * width
-        qImg = QImage(img, width, height, bytesPerLine, QImage.Format_RGB888)
+        qImg = QImage(img, width, height, bytesPerLine, QImage.Format.Format_RGB888)
         pixmap = QPixmap.fromImage(qImg)
         self._label.setPixmap(pixmap)
 
@@ -427,7 +423,7 @@ class CSDisplayWidget(QWidget):
         img = (imgDouble*255).astype(np.uint8)
         height, width, channel = img.shape
         bytesPerLine = channel * width
-        qImg = QImage(img, width, height, bytesPerLine, QImage.Format_RGB888)
+        qImg = QImage(img, width, height, bytesPerLine, QImage.Format.Format_RGB888)
         pixmap = QPixmap.fromImage(qImg)
         self._label.setPixmap(pixmap)
 # ----------------------------------------------------------------------------------		
@@ -449,7 +445,7 @@ class CSDisplayColorWheel(QWidget):
         colorWheelImg = (colorStudioUtils.colorWheel(self._width//2)*255).astype(np.uint8)
         height, width, channel = colorWheelImg.shape
         bytesPerLine = channel * width
-        qImg = QImage(colorWheelImg, width, height, bytesPerLine, QImage.Format_RGB888)
+        qImg = QImage(colorWheelImg, width, height, bytesPerLine, QImage.Format.Format_RGB888)
 
         # store pixmap in object
         self._pixmap = QPixmap.fromImage(qImg)
@@ -517,11 +513,11 @@ class CSQSaturationLayout(QVBoxLayout):
 
         # create 
         self._linearSaturationValueLabel = QLabel("linear saturation: "+"{:+.0f}".format(self._linearSaturation))
-        self._sliderLinearSaturation = QSlider(QtCore.Qt.Horizontal)
+        self._sliderLinearSaturation = QSlider(QtCore.Qt.Orientation.Horizontal)
         self._sliderLinearSaturation.setValue(50)
 
         self._gammaSaturationValueLabel = QLabel("gamma saturation: "+"{:+.0f}".format(self._gammaSaturation))
-        self._sliderGammaSaturation = QSlider(QtCore.Qt.Horizontal)
+        self._sliderGammaSaturation = QSlider(QtCore.Qt.Orientation.Horizontal)
         self._sliderGammaSaturation.setValue(50)
 
         # add  to layout
