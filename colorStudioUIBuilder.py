@@ -8,13 +8,7 @@ Color Studio - Rémi Cozot 2019
 # ----------------------------------------------------------------------------------
 # main changes
 # ----------------------------------------------------------------------------------
-# GUI lib: pygame to pyqt5
-# include 3d color point cloud (modernGL) 
-# ----------------------------------------------------------------------------------
-# version0.0
-# -----------------------------------------------------------------------------------
-# Qt window
-
+# GUI : PyQt5 to PyQt6
 # import(s)
 # ----------------------------------------------------------------------------------
 
@@ -25,9 +19,9 @@ import moderngl
 import numpy as np
 import skimage
 
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QSlider
-from PyQt5.QtGui import QIcon, QPixmap, QImage
-from PyQt5 import QtCore, QtOpenGL 
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QSlider
+from PyQt6.QtGui import QIcon, QPixmap, QImage
+from PyQt6 import QtCore 
 
 import colorStudioModel
 import colorStudioWidget

@@ -44,7 +44,7 @@ def loadImage(filename, scale=0.5):
         filename   - Required  : image filename (Str)
         scale      - Optional  : scaling factor [=0.5] (Float)
     """
-    img = imageio.imread(filename)
+    img = imageio.v3.imread(filename)
     imgDouble = 1.0*img/255.0
     if scale != 1.0 :
         imgDouble = skimage.transform.rescale(imgDouble, scale, anti_aliasing=True, channel_axis= 2 )

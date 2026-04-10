@@ -8,7 +8,7 @@ Color Studio - Rémi Cozot 2019
 # ----------------------------------------------------------------------------------
 # main changes
 # ----------------------------------------------------------------------------------
-# GUI lib: pygame to pyqt5
+# GUI : PyQt5 to PyQt6
 # include 3d color point cloud (modernGL) 
 # ----------------------------------------------------------------------------------
 # version0.0
@@ -21,7 +21,7 @@ import sys
 
 import easygui
 
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication
 
 import colorStudioModel
 import colorStudioWidget
@@ -61,5 +61,5 @@ lightsScene.print()
 ui = colorStudioUIBuilder.CSUIAllBuilder(lightsScene)
 
 # run app for event management
-app.exec_()
+app.exec()
 
