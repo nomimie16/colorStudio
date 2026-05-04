@@ -9,24 +9,23 @@ Color Studio - Rémi Cozot 2019
 # main changes
 # ----------------------------------------------------------------------------------
 # GUI : PyQt5 to PyQt6
-# include 3d color point cloud (modernGL) 
+# EasyGUI to PyQt6.QFileDialog
+# ----------------------------------------------------------------------------------
+# Requires Python >= 3.13
+# Tested on Python 3.13.12  
 # ----------------------------------------------------------------------------------
 # version0.0
-# -----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------
 # Qt window
 
 # import(s)
 # ----------------------------------------------------------------------------------
 import sys
 
-import easygui
-
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QFileDialog
 
 import colorStudioModel
 import colorStudioWidget
-import colorStudioController
-import colorStudioUtils
 import colorStudioUIBuilder
 
 # ----------------------------------------------------------------------------------		
@@ -42,7 +41,7 @@ if not app:  app = QApplication(sys.argv)
 
 # select input file name
 defaultFilename = "./xml-2019-6-7-22-47-1.xml" 
-inputFilename =  easygui.fileopenbox(msg="select light-settup file",title="Color Studio",default='xml*.xml',filetypes=["*.xml","xml files"],multiple=False)
+inputFilename, _ = QFileDialog.getOpenFileName(None, "Select light-setup file", "", "XML files (*.xml)")
 print("ColorStudio: inuput file>",inputFilename)
 
 if inputFilename == None: 

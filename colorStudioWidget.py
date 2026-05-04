@@ -13,7 +13,6 @@ Color Studio - Rémi Cozot 2019
 # ----------------------------------------------------------------------------------
 
 import sys
-import imageio
 import moderngl
 
 import math
@@ -25,23 +24,16 @@ from PyQt6.QtGui import QPixmap, QImage, QSurfaceFormat
 from PyQt6.QtOpenGLWidgets import QOpenGLWidget
 from PyQt6 import QtCore
 
-import colorStudioModel
 import colorStudioUtils
 import colorStudioUIBuilder
 
 # functions
 # ----------------------------------------------------------------------------------
 def getScreenSize():
-    app = QApplication(sys.argv)
+    app = QApplication.instance() or QApplication(sys.argv)
     screen = app.primaryScreen()
     size = screen.size()
-
-    x = size.width()
-    y = size.height()
-
-    app.quit()
-
-    return (x,y)
+    return (size.width(), size.height())
 
 # ----------------------------------------------------------------------------------
 # classes
@@ -182,7 +174,7 @@ class MyWidgetGL(QModernGLWidget):
         self.update()
 
     def mouseReleaseEvent(self, evt):
-        pan_tool.stop_drag(evt.x() / 512, evt.y() / 512)
+        pan_tool.stop_drag(evt.position().x() / 512, evt.position().y() / 512)
         self.scene.pan(pan_tool.value)
         self.update()
 
@@ -461,7 +453,7 @@ class CSDisplayColorWheel(QWidget):
 
     def mouseMoveEvent(self, e):
         # mouse position
-        x,y = e.x(), e.y()
+        x, y = int(e.position().x()), int(e.position().y())
 
         # hsv color
         hsv_array = np.zeros([1,1,3])

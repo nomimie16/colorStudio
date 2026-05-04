@@ -12,21 +12,15 @@ Color Studio - Rémi Cozot 2019
 # import(s)
 # ----------------------------------------------------------------------------------
 
-import sys
-import imageio
-import moderngl
-
-import numpy as np
 import skimage
 
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QSlider
-from PyQt6.QtGui import QIcon, QPixmap, QImage
+from PyQt6.QtWidgets import QLabel
+from PyQt6.QtGui import QIcon
 from PyQt6 import QtCore 
 
 import colorStudioModel
 import colorStudioWidget
 import colorStudioController
-import colorStudioUtils
 
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------
