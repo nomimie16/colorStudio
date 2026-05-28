@@ -141,7 +141,6 @@ def colorWheel(halfSize):
 			elif (r<1.0):
 				sat = 1.0
 				hue = (math.atan2(jj,ii)+math.pi)/(2*math.pi)
-				#hsv_array[i,j,:] = [hue,sat,1.0]
 				hsv_array[i,j,:] = [hue,sat,1.0]
 			else:
 				hsv_array[i,j,:] = [0.0,0.0,0.01]

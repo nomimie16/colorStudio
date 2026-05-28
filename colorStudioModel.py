@@ -160,7 +160,7 @@ class Light:
 		outString ="<"+lightMark+" name=\""+self._name+"\""+">"+"\n"+ \
 			"<"+inputFileMark+ \
 			" ext=\"" + \
-			self.ImagesArray._extImageName+ \
+			self._ImagesArray._extImageName+ \
 			"\" min=\"0\" max=\""+str(self._ImagesArray._nbImage)+"\" "+ \
 			" digit=\""+ str(self._ImagesArray._nbDigit) + "\" >" + \
 			self._ImagesArray._pathImage+self._ImagesArray._baseImageName+ \

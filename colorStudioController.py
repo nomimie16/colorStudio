@@ -100,6 +100,7 @@ class CSAEController(CSController):
 class CSColorWheelController(CSController):
     def __init__(self,root,light,widget,cwidget=None):
         super().__init__(root,light,widget,controlledWidget =cwidget)
+        self._colorChangeCallback = None
 
     def _event(self,widget,event):
         eventType = event[0]
@@ -114,6 +115,9 @@ class CSColorWheelController(CSController):
                 # send new image to widget(s)
                 for w in self._widget:
                     w._update(img)
+                # notify callback if set
+                if self._colorChangeCallback:
+                    self._colorChangeCallback(self._scene)
 # ----------------------------------------------------------------------------------
 class CSSaturationController(CSController):
     def __init__(self,root,postprocess,widget,cwidget=None):

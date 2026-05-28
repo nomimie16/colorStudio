@@ -3,13 +3,8 @@
 Color Studio - Rémi Cozot 2019
 ----------------------------------
 new version of 
-Color Studio - Rémi Cozot 2019
+Color Studio - BUT3 APP 2026
 """
-# ----------------------------------------------------------------------------------
-# main changes
-# ----------------------------------------------------------------------------------
-# GUI : PyQt5 to PyQt6
-# EasyGUI to PyQt6.QFileDialog
 # ----------------------------------------------------------------------------------
 # Requires Python >= 3.13
 # Tested on Python 3.13.12  
@@ -29,7 +24,7 @@ import colorStudioWidget
 import colorStudioUIBuilder
 
 # ----------------------------------------------------------------------------------		
-print("ColorStudio - Rémi Cozot - 2019")
+print("ColorStudio - BUT3 APP - 2026")
 print("-------------------------------")
 screenX, screenY = colorStudioWidget.getScreenSize()
 print("screen resolution: ",screenX,"x",screenY)
@@ -56,7 +51,7 @@ lightsScene.fromXML(inputFilename,colorStudioUIBuilder.CSUIBuilder.template['sca
 # print scene
 lightsScene.print()
 
-# build GUI according to scene
+# build GUI according to scene (utiliser l'interface unifiée par défaut)
 ui = colorStudioUIBuilder.CSUIAllBuilder(lightsScene)
 
 # run app for event management

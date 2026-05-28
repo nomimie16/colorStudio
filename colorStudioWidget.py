@@ -426,7 +426,7 @@ class CSDisplayColorWheel(QWidget):
         self._controller = controller
 
         # size
-        self._width = 480
+        self._width = width
         self._height = self._width
 
         # title and window size

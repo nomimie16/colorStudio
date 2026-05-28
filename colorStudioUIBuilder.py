@@ -11,16 +11,9 @@ Color Studio - Rémi Cozot 2019
 # GUI : PyQt5 to PyQt6
 # import(s)
 # ----------------------------------------------------------------------------------
-
-import skimage
-
-from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QIcon
-from PyQt6 import QtCore 
 
-import colorStudioModel
-import colorStudioWidget
-import colorStudioController
+import colorStudioUnifiedWindow
 
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------
@@ -85,83 +78,10 @@ class CSUIBuilder:
 
 # ----------------------------------------------------------------------------------
 class CSUIAllBuilder(CSUIBuilder):
-    def __init__(self,lightsScene):
-        # (0) load qIcon images and get screen resolution
-        CSUIBuilder.uiLoadIcon()
-
-        # (1) render Widget
-        self._renderWidget = colorStudioWidget.CSDisplayWidget(None, "Color Studio - RC 2019")
-        x,y = CSUIBuilder.template['uiRenderWidget_pos']
-        w,h = CSUIBuilder.template['uiRenderWidget_size']
-        self._renderWidget.setGeometry(x,y,w,h)
-
-        # (2) color3D widget
-        self._color3DWidget = colorStudioWidget.MyWidgetGL(skimage.transform.rescale(lightsScene.render(), 0.1, anti_aliasing=True, channel_axis =2 ),True)
-        x,y = CSUIBuilder.template['uiColor3DWidget_pos']
-        w, h = CSUIBuilder.template['uiColor3DWidget_size'] 
-        self._color3DWidget.setGeometry(x,y,w,h)
-
-        # (3) colorWheel Widget
-        x,y = CSUIBuilder.template['uiColorWheelWidget_pos']
-        w,h = CSUIBuilder.template['uiColorWheelWidget_size']
-        self._colorWheelWidget = colorStudioWidget.CSDisplayColorWheel(None,w)
-        self._colorWheelWidget.setGeometry(x,y,w,h)
-        colorWheelController = colorStudioController.CSColorWheelController(lightsScene,None,[self._renderWidget,self._color3DWidget],self._colorWheelWidget)
-        self._colorWheelWidget._controller = colorWheelController
-
-        # (4) control Widget
-        self._controlWidget = colorStudioWidget.CSDisplayControls()
-        x,y = CSUIBuilder.template['uiControlWidget_pos']
-        w,h = CSUIBuilder.template['uiControlWidget_size']
-        self._controlWidget.setGeometry(x,y,w,h)
-
-        # (5) load/save layout to control widget
-        loadSaveLayout = colorStudioWidget.CSQLoadSaveLayout(CSUIBuilder.uiLoadIMG,CSUIBuilder.uiSaveIMG)
-        self._controlWidget._layout.addWidget(QLabel("Load / Save"))
-        self._controlWidget._layout.addLayout(loadSaveLayout)
-
-        # (6) light Control Layout per light
-        for light in lightsScene._lights:
-            self._controlWidget._layout.addWidget(QLabel("Light: "+light._name+" - control [ - | EV | + ] [light color] [light position]"))
-            # set value according to light
-            lightControl_layout = colorStudioWidget.CSQLightControlLayout(None, lightPosIdx=light._imageIdx)
-            expoString = "{:+.2f}".format(light._exposure)
-            lightControl_layout._exposureValueLabel.setText(expoString)
-            self._controlWidget._layout.addLayout(lightControl_layout)
-            # lightController
-            lightController = colorStudioController.CSLightController(lightsScene, light, [self._renderWidget,self._color3DWidget])
-            lightController._colorWheelController = colorWheelController
-            lightControl_layout._controller = lightController
-
-        # (7) post processing
-        # hacking waiting to Post process in XML
-        ae = colorStudioModel.AE_Ymean(Ytarget=0.5,exposure=0.0)
-        lightsScene.addPostProcess(ae)
-        self._controlWidget._layout.addWidget(QLabel("Automatic Exposure"))
-        AE_layout = colorStudioWidget.CSQAEControlLayout(None)
-        self._controlWidget._layout.addLayout(AE_layout)
-        ae_controller = colorStudioController.CSAEController(lightsScene,ae,[self._renderWidget,self._color3DWidget])
-        AE_layout._controller = ae_controller
-
-        sat = colorStudioModel.Saturation()
-        lightsScene.addPostProcess(sat)
-        sat_layout = colorStudioWidget.CSQSaturationLayout(None)
-        self._controlWidget._layout.addLayout(sat_layout)
-        sat_controller = colorStudioController.CSSaturationController(lightsScene,sat,[self._renderWidget,self._color3DWidget])
-        sat_layout._controller = sat_controller
-       # end of hack
-
-        # (xxx) show all window
-        self._renderWidget.show()
-        self._controlWidget.show()
-        self._color3DWidget.show()
-        self._colorWheelWidget.show()
-
-        # (end) init render
-        self._renderWidget._update(lightsScene.render())
-
-
-
+    def __init__(self, lightsScene, use_unified=True):
+        # Nouvelle interface unifiée
+        self._unifiedWindow = colorStudioUnifiedWindow.ColorStudioUnifiedWindow(lightsScene)
+        self._unifiedWindow.show()
 
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------
