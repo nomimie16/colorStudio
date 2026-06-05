@@ -1,3 +1,15 @@
+# _____________________________ Exporter Blender pour Color Studio _______________________________
+# 
+# - Dans l'onglet "Édition" de Blender, sélectionnez "Paramètres"
+# - Allez dans "Add-ons" et faites "Installer depuis les fichiers" en haut à droite de la fenêtre
+# - Sélectionnez le fichier blenderColorStudioExporter.py
+# - Activez l'extension
+# - Redémarrez Blender
+# - Vous pourrez voir apparaître "Color Studio" dans la barre latérale
+# - Vous pouvez configurer l'export et le lancer
+# - Toutes les images ainsi que le fichier XML seront générés dans le répertoire spécifié
+# ________________________________________________________________________________________________
+
 bl_info = {
     "name": "Color Studio Exporter",
     "author": "SAE Maintenance Logicielle",
