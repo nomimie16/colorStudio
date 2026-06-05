@@ -11,9 +11,13 @@ Color Studio - Rémi Cozot 2019
 # GUI : PyQt5 to PyQt6
 # import(s)
 # ----------------------------------------------------------------------------------
-from PyQt6.QtGui import QIcon
+import sys
 
-import colorStudioUnifiedWindow
+from PyQt6.QtWidgets import QApplication, QFileDialog
+
+import colorStudioUnifiedWindow as colorStudioUnifiedWindow
+
+
 
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------

@@ -14,9 +14,13 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt, QSize
 
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+
 import colorStudioModel
-import colorStudioWidget
-import colorStudioController
+from ui.widget import colorStudioWidget
+from controllers import colorStudioController
 
 
 # ----------------------------------------
