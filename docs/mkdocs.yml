@@ -1,0 +1,32 @@
+site_name: ColorStudio Documention
+site_url: https://nomimie16.github.io/colorStudio/  
+repo_url: https://github.com/nomimie16/colorStudio
+
+nav:
+  - Documentation utilisateurs :
+    # - Accueil: index.md
+    - Présentation: index.md
+    - Installation: install.md
+    - Interface et utilisation : utilisation.md
+    - FAQ : faq.md
+    - Credits : credits.md
+
+  - Documentation technique:
+    - Vue d'ensemble : overview.md
+    - Configuration : config.md
+    - Architecture: architecture.md
+    - Maintenance : maintenance.md
+    - Annexes : annexes.md
+
+theme:
+  name: shadcn
+
+markdown_extensions:
+  - pymdownx.blocks.tab
+  - pymdownx.tabbed
+  - codehilite
+  - admonition
+  - pymdownx.blocks.details
+
+extra_css:
+  - overrides/theme.css
