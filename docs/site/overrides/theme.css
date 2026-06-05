@@ -1,0 +1,107 @@
+:root {
+
+   color-scheme: light;
+  --primary: #3B82F6;
+  --primary-foreground: #ffffff;
+
+
+  --blue-50:  #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-800: #1e40af;
+  --blue-900: #1e3a8a;
+
+
+  /* Accentuation / survols / focus */
+  --accent: var(--blue-100);
+  --accent-foreground: var(--blue-700);
+
+  --muted: var(--blue-50);
+  --muted-foreground: var(--blue-600);
+
+  /* Pour les focus rings */
+  --ring: var(--blue-500);
+
+  /* Fond clair conservé */
+  --background: #ffffff;
+  --foreground: #0f172a;
+
+  /* Cards */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  /* Bordures */
+  --border: #cfe0ff;
+  --border-strong: var(--blue-400);
+
+  /* Ombres bleutées */
+  --shadow-soft: rgba(59, 130, 246, 0.15);
+  --shadow-strong: rgba(29, 78, 216, 0.25);
+
+  /* Inputs / surfaces */
+  --input: var(--blue-50);
+  --input-border: var(--blue-200);
+  --input-hover: var(--blue-100);
+  --input-focus: var(--blue-300);
+
+  
+}
+h2 {
+  --spacing: 0.125rem;
+}
+
+
+.dark {
+  /* Couleurs principales */
+  --primary: #60a5fa;
+  --primary-foreground: #0f172a;
+
+  /* Palette bleue adaptée au dark */
+  --blue-50:  #0c1220;
+  --blue-100: #101a2d;
+  --blue-200: #13223b;
+  --blue-300: #1b3358;
+  --blue-400: #244576;
+  --blue-500: #3b82f6;
+  --blue-600: #60a5fa;
+  --blue-700: #93c5fd;
+  --blue-800: #bfdbfe;
+  --blue-900: #dbeafe;
+
+  /* Accentuation */
+  --accent: var(--blue-400);
+  --accent-foreground: #ffffff;
+
+  --muted: var(--blue-300);
+  --muted-foreground: var(--blue-700);
+
+  /* Rings */
+  --ring: var(--blue-500);
+
+  /* Fond sombre */
+  --background: #0f172a;
+  --foreground: #ffffff;
+
+  /* Cards */
+  --card: #1e293b;
+  --card-foreground: #ffffff;
+
+  /* Bordures */
+  --border: #1e3a5f;
+  --border-strong: #3b82f6;
+
+  /* Ombres bleues */
+  --shadow-soft: rgba(96, 165, 250, 0.10);
+  --shadow-strong: rgba(96, 165, 250, 0.25);
+
+  /* Inputs */
+  --input: #1a2336;
+  --input-border: #344563;
+  --input-hover: #1d2b45;
+  --input-focus: #27406a;
+}
