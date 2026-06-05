@@ -8,28 +8,12 @@ Color Studio - Rémi Cozot 2019
 # ----------------------------------------------------------------------------------
 # main changes
 # ----------------------------------------------------------------------------------
-# GUI lib: pygame to pyqt5
+# GUI : PyQt5 to PyQt6
 # include 3d color point cloud (modernGL) 
 # ----------------------------------------------------------------------------------
 # version0.0
 # -----------------------------------------------------------------------------------
 # Qt window
-
-# import(s)
-# ----------------------------------------------------------------------------------
-
-import sys
-import imageio
-import moderngl
-
-import numpy as np
-import skimage
-
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QSlider
-from PyQt5.QtGui import QIcon, QPixmap, QImage
-from PyQt5 import QtCore, QtOpenGL 
-
-import colorStudioModel
 
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------
@@ -116,6 +100,7 @@ class CSAEController(CSController):
 class CSColorWheelController(CSController):
     def __init__(self,root,light,widget,cwidget=None):
         super().__init__(root,light,widget,controlledWidget =cwidget)
+        self._colorChangeCallback = None
 
     def _event(self,widget,event):
         eventType = event[0]
@@ -130,6 +115,9 @@ class CSColorWheelController(CSController):
                 # send new image to widget(s)
                 for w in self._widget:
                     w._update(img)
+                # notify callback if set
+                if self._colorChangeCallback:
+                    self._colorChangeCallback(self._scene)
 # ----------------------------------------------------------------------------------
 class CSSaturationController(CSController):
     def __init__(self,root,postprocess,widget,cwidget=None):

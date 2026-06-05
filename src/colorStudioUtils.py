@@ -10,9 +10,8 @@ Color Studio - Rémi Cozot 2019
 # ----------------------------------------------------------------------------------
 import math
 import numpy as np
-import imageio
+from PIL import Image
 import skimage
-from skimage import transform
 
 # ----------------------------------------------------------------------------------
 # functions
@@ -44,8 +43,8 @@ def loadImage(filename, scale=0.5):
         filename   - Required  : image filename (Str)
         scale      - Optional  : scaling factor [=0.5] (Float)
     """
-    img = imageio.imread(filename)
-    imgDouble = 1.0*img/255.0
+    img = np.array(Image.open(filename).convert("RGB"))
+    imgDouble = img.astype(np.float64) / 255.0
     if scale != 1.0 :
         imgDouble = skimage.transform.rescale(imgDouble, scale, anti_aliasing=True, channel_axis= 2 )
     return imgDouble
@@ -142,7 +141,6 @@ def colorWheel(halfSize):
 			elif (r<1.0):
 				sat = 1.0
 				hue = (math.atan2(jj,ii)+math.pi)/(2*math.pi)
-				#hsv_array[i,j,:] = [hue,sat,1.0]
 				hsv_array[i,j,:] = [hue,sat,1.0]
 			else:
 				hsv_array[i,j,:] = [0.0,0.0,0.01]

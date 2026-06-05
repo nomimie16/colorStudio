@@ -3,7 +3,7 @@
 Color Studio - Rémi Cozot 2019
 ----------------------------------
 new version of 
-Color Studio - Rémi Cozot 2019
+Color Studio - BUT3 APP 2026
 """
 
 # ----------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ class Light:
 		outString ="<"+lightMark+" name=\""+self._name+"\""+">"+"\n"+ \
 			"<"+inputFileMark+ \
 			" ext=\"" + \
-			self.ImagesArray._extImageName+ \
+			self._ImagesArray._extImageName+ \
 			"\" min=\"0\" max=\""+str(self._ImagesArray._nbImage)+"\" "+ \
 			" digit=\""+ str(self._ImagesArray._nbDigit) + "\" >" + \
 			self._ImagesArray._pathImage+self._ImagesArray._baseImageName+ \
@@ -219,13 +219,26 @@ class Scene:
 
     def toXML(self):
         # create XML string
+        outString = "<?xml version=\"1.0\" ?>\n"
+        outString += "<LIGHTSETTUP>\n"
+
         # <LIGHTS>
         lsMark = "LIGHTS"
-        outString = "<"+lsMark+">"+"\n"
+        outString += "<"+lsMark+">\n"
         for l in self._lights :
-            outString = outString+l.toXML()+"\n"
+            outString += l.toXML()+"\n"
         # add </LIGHTS>
-        outString = outString + "</" +lsMark +">"+ '\n'
+        outString += "</" +lsMark +">\n"
+
+        # <POSTPROCESSES>
+        ppMark = "POSTPROCESSES"
+        outString += "<"+ppMark+">\n"
+        for pp in self._postProcesses :
+            outString += pp.toXML()+"\n"
+        # add </POSTPROCESSES>
+        outString += "</" +ppMark +">\n"
+
+        outString += "</LIGHTSETTUP>\n"
         return  outString
 
     def fromXML(self, xmlFile, scale =0.5):
@@ -284,20 +297,44 @@ class Scene:
 
         # explore postprocess (in order they will be applyed in the same order (!))
         for xp in xPosts:
+            # get postprocess name attribute
+            ppName = xp.attributes['name'].value
+            print('<POSTPROCESS name="',ppName,'">')
+
             children = xp.childNodes # all children
             for child in children:
                 childNodeIsElement = (child.nodeType  == miniXml.Node.ELEMENT_NODE)
-                if childNodeIsElement : 
+                if childNodeIsElement :
                     # child is ELEMENT
                     if child.tagName == 'CHROMA':
                         # <CHROMA type="AWB"|"SATURATION">
                         # get type attribute value
                         typeString = child.attributes['type'].value
                         print('<CHROMA type="',typeString,'">')
-                        if typeString=='AWB':
-                            pass
-                        if typeString=='saturation':
-                            pass
+                        if typeString=='SATURATION':
+                            # Load saturation parameters
+                            linearEl = child.getElementsByTagName('LINEAR')
+                            gammaEl = child.getElementsByTagName('GAMMA')
+                            linearSat = float(linearEl[0].firstChild.data) if linearEl else 0
+                            gammaSat = float(gammaEl[0].firstChild.data) if gammaEl else 0
+                            sat = Saturation(linearSat, gammaSat)
+                            self.addPostProcess(sat)
+
+                    elif child.tagName == 'LUMINANCE':
+                        # <LUMINANCE type="AE"|"GAMMA">
+                        typeString = child.attributes['type'].value
+                        print('<LUMINANCE type="',typeString,'">')
+                        if typeString=='AE':
+                            # Load auto exposure parameters
+                            yEl = child.getElementsByTagName('Y')
+                            onOffEl = child.getElementsByTagName('ON_OFF')
+                            expEl = child.getElementsByTagName('EXPOSURE')
+                            ytarget = float(yEl[0].firstChild.data) if yEl else 0.5
+                            on_off = onOffEl[0].firstChild.data.lower() == 'true' if onOffEl else True
+                            exposure = float(expEl[0].firstChild.data) if expEl else 0.0
+                            ae = AE_Ymean(Ytarget=ytarget, exposure=exposure)
+                            ae.setOnOff(on_off)
+                            self.addPostProcess(ae)
 
 
 
@@ -335,6 +372,9 @@ class PostProcess:
 
 	def postProcess(self,img):
 		return img
+
+	def toXML(self):
+		return ""
 # ----------------------------------------------------------------------------------
 #  POST PROCESS : SATURATION -VIBRANCE 
 # ----------------------------------------------------------------------------------
@@ -348,6 +388,9 @@ class Saturation(PostProcess):
     def setLinearSaturation(self,saturation): self._linearSaturation = saturation
 
     def setGammaSaturation(self,vibrance): self._gammaSaturation = vibrance
+
+    def toXML(self):
+        return "<POSTPROCESS name=\"saturation\">\n<CHROMA type=\"SATURATION\">\n<LINEAR>"+str(self._linearSaturation)+"</LINEAR>\n<GAMMA>"+str(self._gammaSaturation)+"</GAMMA>\n</CHROMA>\n</POSTPROCESS>"
 
     def postProcess(self,img):
         if self._linearSaturation!=0: 
@@ -401,6 +444,9 @@ class AE_Ymean(PostProcess):
     def setExposure(self,exposureValue):
         if self._on_off: self._exposureON = exposureValue
         else: self._exposureOFF = exposureValue
+
+    def toXML(self):
+        return "<POSTPROCESS name=\"auto exposure\">\n<LUMINANCE type=\"AE\">\n<Y>"+repr(float(self._Ytarget))+"</Y>\n<ON_OFF>"+str(self._on_off).lower()+"</ON_OFF>\n<EXPOSURE>"+repr(float(self._exposureON))+"</EXPOSURE>\n</LUMINANCE>\n</POSTPROCESS>"
 
     def postProcess(self,img):
         if self._on_off: 

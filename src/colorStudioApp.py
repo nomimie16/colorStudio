@@ -3,25 +3,21 @@
 Color Studio - Rémi Cozot 2019
 ----------------------------------
 new version of 
-Color Studio - Rémi Cozot 2019
+Color Studio - BUT3 APP 2026
 """
 # ----------------------------------------------------------------------------------
-# main changes
-# ----------------------------------------------------------------------------------
-# GUI lib: pygame to pyqt5
-# include 3d color point cloud (modernGL) 
+# Requires Python >= 3.13
+# Tested on Python 3.13.12  
 # ----------------------------------------------------------------------------------
 # version0.0
-# -----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------
 # Qt window
 
 # import(s)
 # ----------------------------------------------------------------------------------
 import sys
 
-import easygui
-
-from PyQt5.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QFileDialog
 
 import colorStudioModel
 import ui.widget.colorStudioWidget as colorStudioWidget
@@ -30,7 +26,7 @@ import colorStudioUtils
 import ui.builders.colorStudioUIBuilder as colorStudioUIBuilder
 
 # ----------------------------------------------------------------------------------		
-print("ColorStudio - Rémi Cozot - 2019")
+print("ColorStudio - BUT3 APP - 2026")
 print("-------------------------------")
 screenX, screenY = colorStudioWidget.getScreenSize()
 print("screen resolution: ",screenX,"x",screenY)
@@ -42,7 +38,7 @@ if not app:  app = QApplication(sys.argv)
 
 # select input file name
 defaultFilename = "./xml-2019-6-7-22-47-1.xml" 
-inputFilename =  easygui.fileopenbox(msg="select light-settup file",title="Color Studio",default='xml*.xml',filetypes=["*.xml","xml files"],multiple=False)
+inputFilename, _ = QFileDialog.getOpenFileName(None, "Select light-setup file", "", "XML files (*.xml)")
 print("ColorStudio: inuput file>",inputFilename)
 
 if inputFilename == None: 
@@ -57,9 +53,9 @@ lightsScene.fromXML(inputFilename,colorStudioUIBuilder.CSUIBuilder.template['sca
 # print scene
 lightsScene.print()
 
-# build GUI according to scene
+# build GUI according to scene (utiliser l'interface unifiée par défaut)
 ui = colorStudioUIBuilder.CSUIAllBuilder(lightsScene)
 
 # run app for event management
-app.exec_()
+app.exec()
 
